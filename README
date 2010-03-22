@@ -1,0 +1,6 @@
+Simple stream log tail -f over http example for node.js
+
+Change filename to your log file name in stream.js.
+
+to run
+$ /usr/local/bin/node server.js

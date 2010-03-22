@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <title>node log stream</title>
+    <style type="text/css">
+      body {
+        padding: 0;
+        margin: 0;
+        font-family: Helvetica, Tahoma, fixed; 
+        font-size: 12pt;
+        line-height: 120%;
+        color: #0f0;
+        background: #000;
+      }
+      #log {
+        display: block;
+        overflow: hidden;
+      }
+      .logLine {
+        border-bottom: 1px dotted #aaa;
+        padding: 8px 0px 8px 0px;
+        margin-bottom: 8px;
+      }
+    </style>
+    
+    <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico" /> 
+    <script src="jquery-1.2.6.min.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div id="log"></div>
+    </div>
+    <script type="text/javascript">
+
+      function scrollDown () { window.scrollBy(0, 100000000000000000); }
+
+      function addLine (data) {
+        if ((data === null) || (data && !data.lines) || (data && data.lines && (data.lines.length < 1)))
+          return;
+
+        for (var i = 0; (i < data.lines.length); i++) {
+
+          var logLineContainer = $(document.createElement("div"));
+
+          var content = '<div class="logLine">' + data.lines[i] + '</div>';
+
+          logLineContainer.html(content);
+
+          $("#log").append(logLineContainer);
+        }
+
+        scrollDown();
+      }
+
+      function longPoll (data) {
+        if (data && data.data && data.data.lines) {
+          addLine(data.data);
+        }
+
+        $.ajax({ cache: false , type: "GET" , url: "/recv" , dataType: "json", 
+          data: { d : null }, 
+          error: function () {
+            longPoll();
+          }, 
+          success: function (data) {
+            longPoll(data);
+          }
+        });
+      }
+
+      $(window).load(function() {
+        longPoll();
+      });
+
+    </script>
+  </body>
+</html>
