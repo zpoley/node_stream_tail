@@ -15,6 +15,7 @@ var server = createServer(function (req, res) {
     var handler = getMap[url.parse(req.url).pathname] || notFound;
 
     res.simpleJSON = function (code, obj) {
+
       tail.addListener("output", function (data) {
 
         var lines = data.split("\n");
@@ -31,6 +32,10 @@ var server = createServer(function (req, res) {
                              ]);
         res.write(raw_data);
         res.close();
+
+        // cleanup
+        tail.removeListener("output", arguments.callee);
+
       });
     };
 
