@@ -10,10 +10,9 @@ Change filename to your log file name in stream.js.
 
 ## Configuration
 
-    Change logfilename in stream.js to the log you'd like to tail on your o
-    machine.
+    Change logfilename in stream.js to the log you'd like to tail on your machine.
 
-## Running
+## Run
     
     node server.js
 
