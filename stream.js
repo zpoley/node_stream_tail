@@ -2,12 +2,14 @@ var createServer = require("http").createServer;
 var readFile = require("fs").readFile;
 var sys = require("sys");
 var url = require("url");
+var spawn = require("child_process").spawn;
 
 DEBUG = false;
 
 var stream = exports;
 
-var tail = process.createChildProcess("tail", ["-f", "/var/log/apache2/access.log"]);
+var tail = spawn("tail", ["-f", "/opt/local/apache2/logs/access_log"]);
+
 sys.puts("start tailing");
 
 var server = createServer(function (req, res) {
@@ -16,9 +18,9 @@ var server = createServer(function (req, res) {
 
     res.simpleJSON = function (code, obj) {
 
-      tail.addListener("output", function (data) {
+      tail.stdout.on("data", function (data) {
 
-        var lines = data.split("\n");
+        var lines = data.toString().split("\n");
         lines.pop(); // remove trailing ""
 
         var raw_data = JSON.stringify({
@@ -27,14 +29,14 @@ var server = createServer(function (req, res) {
           }
         });
 
-        res.sendHeader(code, [ ["Content-Type", "text/json"]
+        res.writeHeader(code, [ ["Content-Type", "text/json"]
                              , ["Content-Length", raw_data.length]
                              ]);
         res.write(raw_data);
-        res.close();
+        res.end();
 
         // cleanup
-        tail.removeListener("output", arguments.callee);
+        tail.removeListener("data", arguments.callee);
 
       });
     };
@@ -52,11 +54,11 @@ var server = createServer(function (req, res) {
 var NOT_FOUND = "Not Found\n";
 
 function notFound(req, res) {
-  res.sendHeader(404, [ ["Content-Type", "text/plain"]
+  res.writeHeader(404, [ ["Content-Type", "text/plain"]
                       , ["Content-Length", NOT_FOUND.length]
                       ]);
   res.write(NOT_FOUND);
-  res.close();
+  res.end();
 }
 
 var getMap = {};
@@ -108,9 +110,9 @@ stream.staticHandler = function (filename) {
 
   return function (req, res) {
     loadResponseData(function () {
-      res.sendHeader(200, headers);
+      res.writeHeader(200, headers);
       res.write(body, encoding);
-      res.close();
+      res.end();
     });
   }
 };

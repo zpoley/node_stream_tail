@@ -1,5 +1,5 @@
 HOST = null; // localhost
-PORT = 8002;
+PORT = 8010;
 
 var stream = require("./stream");
 var sys = require("sys");

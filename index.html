@@ -31,6 +31,8 @@
     </div>
     <script type="text/javascript">
 
+      g = { hasFocus : true, unreadCount : 0 };
+
       function scrollDown () { window.scrollBy(0, 100000000000000000); }
 
       function addLine (data) {
@@ -46,6 +48,11 @@
           logLineContainer.html(content);
 
           $("#log").append(logLineContainer);
+        }
+
+        if (!g.hasFocus) {
+          g.unreadCount++;
+          document.title = "(" + g.unreadCount + ") node log stream";
         }
 
         scrollDown();
@@ -69,6 +76,17 @@
 
       $(window).load(function() {
         longPoll();
+      });
+
+      $(window).blur(function() {
+        g.hasFocus = false;
+        g.unreadCount = 0;
+      });
+
+      $(window).focus(function() {
+        g.hasFocus = true;
+        g.unreadCount = 0;
+        document.title = "node log stream";
       });
 
     </script>
