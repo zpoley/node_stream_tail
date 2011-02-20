@@ -37,7 +37,7 @@ var server = createServer(function (req, res) {
         res.end();
 
         // cleanup
-        tail.removeListener("data", arguments.callee);
+        tail.stdout.removeListener("data", arguments.callee);
 
       });
     };

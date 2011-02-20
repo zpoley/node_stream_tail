@@ -4,6 +4,10 @@ Stream a log file to a web page for easy log viewing.
 
 Change filename to your log file name in stream.js.
 
+## Requirements
+
+Node.js v0.4.1 or higher.
+
 ## Installation
 
     git clone https://github.com/zpoley/node_stream_tail.git  
