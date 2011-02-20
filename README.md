@@ -1,7 +1,5 @@
 # Node Stream Tail
 
-Simple stream log tail -f over http example for Node.js. 
-
 Stream a log file to a web page for easy log viewing. 
 
 Change filename to your log file name in stream.js.
@@ -9,6 +7,11 @@ Change filename to your log file name in stream.js.
 ## Installation
 
     git clone https://github.com/zpoley/node_stream_tail.git  
+
+## Configuration
+
+    Change logfilename in stream.js to the log you'd like to tail on your o
+    machine.
 
 ## Running
     
